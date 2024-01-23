@@ -14,14 +14,16 @@ const AddTodo = ({ addTodo, open, handleOpenChange }: {
   open: boolean,
   handleOpenChange: (open: boolean) => void
 }) => {
-  
-  const { register, setValue, handleSubmit, control, reset, formState: { errors }, getValues } = useForm({
+
+  const { register, setValue, handleSubmit, control, reset, formState: { errors }, getValues, } = useForm({
     resolver: yupResolver(validationSchema)
   })
 
   const onSubmit: SubmitHandler<TodoInput> = (data: TodoInput) => {
     console.log(data)
     addTodo(data.title, data.content ? data.content : "")
+    setValue("title", "")
+    setValue("content", "")
   }
 
   const onError: SubmitErrorHandler<TodoInput> = (data) => {
