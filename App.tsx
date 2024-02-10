@@ -46,12 +46,17 @@ function App() {
   const addTodo = (title: string, content: string) => {
     console.log("new todo:")
     console.log("title: ", title, " content: ", content);
+
+    if (content.length < 2 || title.length < 2) {
+      return;
+    }
+
     setTodos((prev) => [...prev, {
       title, content, completed: false,
       id: prev.length
     }])
 
-    setDialogOpen(() => false);
+    setDialogOpen(false);
   }
 
   const updateTodo = (newTitle: string, newContent: string, id: number) => {
@@ -86,12 +91,17 @@ function App() {
           handleToggle={toggleCompleted} addTodo={addTodo}
         />
 
-        <TodoList handleDelete={deleteTodo} todos={todos.filter((i) => !i.completed)} handleToggle={toggleCompleted} addTodo={addTodo} />
+        <TodoList 
+          handleDelete={deleteTodo} 
+          todos={todos.filter((i) => !i.completed)} 
+          handleToggle={toggleCompleted} 
+          addTodo={addTodo}
+        />
 
         <AddTodo
           addTodo={addTodo}
           open={dialogOpen}
-          handleOpenChange={setDialogOpen}
+          handleOpenChange={(open) => setDialogOpen(open)}
         />
 
         <StatusBar style="auto" />

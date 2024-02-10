@@ -1,7 +1,7 @@
 import { Adapt, Button, Dialog, Input, Sheet } from 'tamagui'
 import { Form, TextArea } from 'tamagui'
+import { Modal, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useRef } from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import { TodoInput, validationSchema } from '../types'
 import { object, string } from 'yup'
@@ -15,15 +15,14 @@ const AddTodo = ({ addTodo, open, handleOpenChange }: {
   handleOpenChange: (open: boolean) => void
 }) => {
 
-  const { register, setValue, handleSubmit, control, reset, formState: { errors }, getValues, } = useForm({
+  const { setValue, handleSubmit, formState: { errors }, getValues, reset } = useForm({
     resolver: yupResolver(validationSchema)
   })
 
   const onSubmit: SubmitHandler<TodoInput> = (data: TodoInput) => {
     console.log(data)
     addTodo(data.title, data.content ? data.content : "")
-    setValue("title", "")
-    setValue("content", "")
+    reset()
   }
 
   const onError: SubmitErrorHandler<TodoInput> = (data) => {
@@ -34,7 +33,7 @@ const AddTodo = ({ addTodo, open, handleOpenChange }: {
   const contentRef = useRef<TextInput>(null);
 
   return (
-    <Dialog modal open={open} onOpenChange={handleOpenChange}>
+    <Dialog modal onOpenChange={handleOpenChange} open={open}>
       <Dialog.Trigger asChild>
         <Button
           style={styles.fab}
@@ -65,7 +64,8 @@ const AddTodo = ({ addTodo, open, handleOpenChange }: {
           exitStyle={{ opacity: 0 }}>
 
         </Dialog.Overlay>
-        <Dialog.Content bordered
+        <Dialog.Content 
+          bordered
           elevate
           key="content"
           animateOnly={['transform', 'opacity']}
